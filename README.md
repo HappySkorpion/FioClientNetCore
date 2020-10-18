@@ -116,10 +116,15 @@ await client.SendTransactionOrdersAsync(new [] {
 
 ### Signing sent transaction orders
 
-The sent transaction orders are not authorized.
+The sent transaction orders are not executed.
 They are only created and preppared for signing.
 The signing 
 needs to be done through Fio internet banking.
+
+## !Requests frequence!
+
+The Fio API accepts the requests every 30 seconds only!</br>
+Sending requests often results in exceptions. So be patient. :)
 
 ## Bugs
 
