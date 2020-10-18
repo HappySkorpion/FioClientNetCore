@@ -130,7 +130,7 @@ namespace HappySkorpion.FioClient
         /// </summary>
         /// <param name="transactionOrders">Domestic transaction orders.</param>
         /// <param name="ctx">Cancellation token.</param>
-        public async Task SendDomesticTransactionOrdersAsync(
+        public async Task SendTransactionOrdersAsync(
             IEnumerable<DomesticTransactionOrder> transactionOrders,
             CancellationToken ctx = default)
         {
@@ -149,7 +149,7 @@ namespace HappySkorpion.FioClient
         /// </summary>
         /// <param name="transactionOrder">Domestic transaction order.</param>
         /// <param name="ctx">Cancellation token.</param>
-        public async Task SendDomesticTransactionOrderAsync(
+        public async Task SendTransactionOrderAsync(
             DomesticTransactionOrder transactionOrder,
             CancellationToken ctx = default)
         {
@@ -168,7 +168,7 @@ namespace HappySkorpion.FioClient
         /// </summary>
         /// <param name="transactionOrders">Euro transactions order.</param>
         /// <param name="ctx">Cancellation token.</param>
-        public async Task SendEuroTransactionOrdersAsync(
+        public async Task SendTransactionOrdersAsync(
             IEnumerable<EuroTransactionOrder> transactionOrders,
             CancellationToken ctx = default)
         {
@@ -187,7 +187,7 @@ namespace HappySkorpion.FioClient
         /// </summary>
         /// <param name="transactionOrder">Euro transaction order.</param>
         /// <param name="ctx">Cancellation token.</param>
-        public async Task SendEuroTransactionOrderAsync(
+        public async Task SendTransactionOrderAsync(
             EuroTransactionOrder transactionOrder,
             CancellationToken ctx = default)
         {
@@ -206,7 +206,7 @@ namespace HappySkorpion.FioClient
         /// </summary>
         /// <param name="transactionOrders">Foreign transactions order.</param>
         /// <param name="ctx">Cancellation token.</param>
-        public async Task SendForeignTransactionOrdersAsync(
+        public async Task SendTransactionOrdersAsync(
             IEnumerable<ForeignTransactionOrder> transactionOrders,
             CancellationToken ctx = default)
         {
@@ -225,7 +225,7 @@ namespace HappySkorpion.FioClient
         /// </summary>
         /// <param name="transactionOrder">Foreign transaction order.</param>
         /// <param name="ctx">Cancellation token.</param>
-        public async Task SendForeignTransactionOrderAsync(
+        public async Task SendTransactionOrderAsync(
             ForeignTransactionOrder transactionOrder,
             CancellationToken ctx = default)
         {

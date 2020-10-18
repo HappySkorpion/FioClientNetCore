@@ -57,7 +57,7 @@ namespace HappySkorpion.FioClient.Tests.Integration
                 }
             };
 
-            await _client.SendEuroTransactionOrdersAsync(paymentOrders);
+            await _client.SendTransactionOrdersAsync(paymentOrders);
         }
     }
 }
