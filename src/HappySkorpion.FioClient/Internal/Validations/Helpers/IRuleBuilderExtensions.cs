@@ -26,7 +26,7 @@ namespace HappySkorpion.FioClient.Internal.Validations.Helpers
             this IRuleBuilder<T, string> ruleBuilder)
         {
             return ruleBuilder
-                .Matches(@"^\d{1,6}-\d{1,10}$")
+                .Matches(@"^(\d{1,6}-)?\d{1,10}$")
                 .WithErrorCode("DomesticAccountNumberValidator")
                 .WithMessage(@"Invalid domestic account number. The valid one has to satisfy the pattern ""{RegularExpression}"".");
         }
@@ -176,36 +176,22 @@ namespace HappySkorpion.FioClient.Internal.Validations.Helpers
                 .MaximumLength(35);
         }
 
-        private readonly static PaymentType[] DomesticPaymentTypes = new[] 
-        { 
-            PaymentType.Standard, 
-            PaymentType.Precedential, 
-            PaymentType.Collection,
-        };
-
-        public static IRuleBuilderOptions<T, PaymentType?> DomesticPaymentType<T>(
-            this IRuleBuilder<T, PaymentType?> ruleBuilder)
+        public static IRuleBuilderOptions<T, DomesticPaymentType?> DomesticPaymentType<T>(
+            this IRuleBuilder<T, DomesticPaymentType?> ruleBuilder)
         {
             return ruleBuilder
-                .Must(x => !x.HasValue || DomesticPaymentTypes.Contains(x.Value))
+                .IsInEnum()
                 .WithErrorCode("PaymentTypeValidator")
-                .WithMessage($"Invalid payment type. The valid one has to be one of {string.Join(", ", DomesticPaymentTypes)}.");
+                .WithMessage($"Invalid payment type. The valid one has to be one of velues from enum type DomesticPaymentType or null.");
         }
 
-
-        private readonly static PaymentType[] EuroPaymentTypes = new[]
-        {
-            PaymentType.Standard,
-            PaymentType.Precedential,
-        };
-
-        public static IRuleBuilderOptions<T, PaymentType?> EuroPaymentType<T>(
-            this IRuleBuilder<T, PaymentType?> ruleBuilder)
+        public static IRuleBuilderOptions<T, EuroPaymentType?> EuroPaymentType<T>(
+            this IRuleBuilder<T, EuroPaymentType?> ruleBuilder)
         {
             return ruleBuilder
-                .Must(x => !x.HasValue || EuroPaymentTypes.Contains(x.Value))
+                .IsInEnum()
                 .WithErrorCode("PaymentTypeValidator")
-                .WithMessage($"Invalid payment type. The valid one has to be one of {string.Join(", ", EuroPaymentTypes)}.");
+                .WithMessage($"Invalid payment type. The valid one has to be one of velues from enum type EuroPaymentType or null.");
         }
 
         public static IRuleBuilderOptions<T, PaymentReason?> PaymentReason<T>(

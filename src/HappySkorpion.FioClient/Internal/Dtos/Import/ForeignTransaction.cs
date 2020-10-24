@@ -5,28 +5,19 @@ namespace HappySkorpion.FioClient.Internal.Dtos
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Browsable(false)]
-    public class T2Transaction
+    public class ForeignTransaction
     {
         [XmlElement("accountFrom")]
         public string AccountFrom { get; set; }
 
-        [XmlElement("amount")]
-        public decimal Amount { get; set; }
-
         [XmlElement("currency")]
         public CurrencyCode Currency { get; set; }
 
+        [XmlElement("amount")]
+        public decimal Amount { get; set; }
+
         [XmlElement("accountTo")]
         public string AccountTo { get; set; }
-
-        [XmlElement("ks")]
-        public string ConstantSymbol { get; set; }
-
-        [XmlElement("vs")]
-        public string VariableSymbol { get; set; }
-
-        [XmlElement("ss")]
-        public string SpecificSymbol { get; set; }
 
         [XmlElement("bic")]
         public string Bic { get; set; }
@@ -36,6 +27,13 @@ namespace HappySkorpion.FioClient.Internal.Dtos
 
         [XmlElement("comment")]
         public string Comment { get; set; }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        public bool ShouldSerializeComment()
+        {
+            return !string.IsNullOrEmpty(Comment);
+        }
 
         [XmlElement("benefName")]
         public string BenefName { get; set; }
@@ -55,31 +53,55 @@ namespace HappySkorpion.FioClient.Internal.Dtos
         [XmlElement("remittanceInfo2")]
         public string RemittanceInfo2 { get; set; }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        public bool ShouldSerializeRemittanceInfo2()
+        {
+            return !string.IsNullOrEmpty(RemittanceInfo2);
+        }
+
         [XmlElement("remittanceInfo3")]
         public string RemittanceInfo3 { get; set; }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        public bool ShouldSerializeRemittanceInfo3()
+        {
+            return !string.IsNullOrEmpty(RemittanceInfo3);
+        }
+
+        [XmlElement("remittanceInfo4")]
+        public string RemittanceInfo4 { get; set; }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        public bool ShouldSerializeRemittanceInfo4()
+        {
+            return !string.IsNullOrEmpty(RemittanceInfo4);
+        }
+
         [XmlIgnore]
-        public PaymentReason? PaymentReason { get; set; }
+        public ChargeType DetailsOfCharges { get; set; }
+
+        [XmlElement("detailsOfCharges")]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        public int DetailsOfChargesInt
+        {
+            get => (int)DetailsOfCharges;
+            set => DetailsOfCharges = (ChargeType)value;
+        }
+
+        [XmlIgnore]
+        public PaymentReason PaymentReason { get; set; }
 
         [XmlElement("paymentReason")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Browsable(false)]
-        public int? PaymentReasonInt
+        public int PaymentReasonInt
         {
-            get => (int?)PaymentReason;
-            set => PaymentReason = (PaymentReason?)value;
-        }
-
-        [XmlIgnore]
-        public PaymentType? PaymentType { get; set; }
-
-        [XmlElement("paymentType")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Browsable(false)]
-        public int? PaymentTypeInt
-        {
-            get => (int?)PaymentType;
-            set => PaymentType = (PaymentType?)value;
+            get => (int)PaymentReason;
+            set => PaymentReason = (PaymentReason)value;
         }
     }
 }

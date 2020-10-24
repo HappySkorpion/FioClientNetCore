@@ -11,11 +11,12 @@ namespace HappySkorpion.FioClient.Internal
     [Browsable(false)]
     public static class XmlSerializerHelper
     {
-        public static string Serialize(object data)
+        public static string Serialize(
+            object data)
         {
             _ = data ?? throw new ArgumentNullException(nameof(data));
 
-            var builder = new StringBuilder();
+            using var builder = new Utf8StringWriter();
             using var writter = XmlWriter.Create(
                 builder,
                 new XmlWriterSettings
@@ -25,9 +26,9 @@ namespace HappySkorpion.FioClient.Internal
                     IndentChars = "  ",
                     Indent = true,
                 });
-            var serializer = new XmlSerializer(data.GetType());
 
-            serializer.Serialize(writter, data);
+            new XmlSerializer(data.GetType())
+                .Serialize(writter, data);
 
             return builder.ToString();
         }
@@ -41,5 +42,12 @@ namespace HappySkorpion.FioClient.Internal
 
             return (T)serializer.Deserialize(reader);
         }
+
+        private class Utf8StringWriter
+            : StringWriter
+        {
+            public override Encoding Encoding => Encoding.UTF8;
+        }
+
     }
 }

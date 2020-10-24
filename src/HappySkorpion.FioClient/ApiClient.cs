@@ -21,17 +21,18 @@ namespace HappySkorpion.FioClient
         private const string BaseUrl = "https://www.fio.cz/ib_api";
         private const string DateFormat = "yyyy-MM-dd";
 
-        private readonly string _authToken;
+        private readonly string _apiToken;
         private readonly HttpClient _httpClient;
 
         /// <summary>
         /// Api client contructor.
         /// </summary>
-        /// <param name="authToken">API token.</param>
+        /// <param name="apiToken">API token.</param>
         /// <remarks>Token can be created in FIO internet banking on page https://ib.fio.sk/ib/wicket/page/NastaveniPage?4 .</remarks>
-        public ApiClient(string authToken)
+        public ApiClient(
+            string apiToken)
         {
-            _authToken = authToken;
+            _apiToken = apiToken;
             _httpClient = new HttpClient();
         }
 
@@ -47,7 +48,7 @@ namespace HappySkorpion.FioClient
             DateTime to, 
             CancellationToken ctx = default)
         {
-            var url = new Uri($"{BaseUrl}/rest/periods/{HttpUtility.UrlEncode(_authToken)}/{FormatParam(from)}/{FormatParam(to)}/transactions.xml");
+            var url = new Uri($"{BaseUrl}/rest/periods/{HttpUtility.UrlEncode(_apiToken)}/{FormatParam(from)}/{FormatParam(to)}/transactions.xml");
 
             var statement = await GetAccountStatementAsync(url, ctx)
                 .ConfigureAwait(false);
@@ -67,7 +68,7 @@ namespace HappySkorpion.FioClient
             int extractionId,
             CancellationToken ctx = default)
         {
-            var url = new Uri($"{BaseUrl}/rest/by-id/{HttpUtility.UrlEncode(_authToken)}/{year}/{extractionId}/transactions.xml");
+            var url = new Uri($"{BaseUrl}/rest/by-id/{HttpUtility.UrlEncode(_apiToken)}/{year}/{extractionId}/transactions.xml");
 
             var statement = await GetAccountStatementAsync(url, ctx)
                 .ConfigureAwait(false);
@@ -83,7 +84,7 @@ namespace HappySkorpion.FioClient
         public async Task<AccountTransactionsResult> ListLastTransactionsAsync(
             CancellationToken ctx = default)
         {
-            var url = new Uri($"{BaseUrl}/rest/last/{HttpUtility.UrlEncode(_authToken)}/transactions.xml");
+            var url = new Uri($"{BaseUrl}/rest/last/{HttpUtility.UrlEncode(_apiToken)}/transactions.xml");
 
             var statement = await GetAccountStatementAsync(url, ctx)
                 .ConfigureAwait(false);
@@ -100,7 +101,7 @@ namespace HappySkorpion.FioClient
             DateTime date,
             CancellationToken ctx = default)
         {
-            var url = new Uri($"{BaseUrl}/rest/set-last-date/{HttpUtility.UrlEncode(_authToken)}/{FormatParam(date)}/");
+            var url = new Uri($"{BaseUrl}/rest/set-last-date/{HttpUtility.UrlEncode(_apiToken)}/{FormatParam(date)}/");
 
             using var response = await _httpClient.GetAsync(url, ctx)
                 .ConfigureAwait(false);
@@ -117,7 +118,7 @@ namespace HappySkorpion.FioClient
             int transactionId,
             CancellationToken ctx = default)
         {
-            var url = new Uri($"{BaseUrl}/rest/set-last-id/{HttpUtility.UrlEncode(_authToken)}/{transactionId}/");
+            var url = new Uri($"{BaseUrl}/rest/set-last-id/{HttpUtility.UrlEncode(_apiToken)}/{transactionId}/");
 
             using var response = await _httpClient.GetAsync(url, ctx)
                 .ConfigureAwait(false);
@@ -130,7 +131,7 @@ namespace HappySkorpion.FioClient
         /// </summary>
         /// <param name="transactionOrders">Domestic transaction orders.</param>
         /// <param name="ctx">Cancellation token.</param>
-        public async Task SendTransactionOrdersAsync(
+        public async Task<OrdersResult> SendTransactionOrdersAsync(
             IEnumerable<DomesticTransactionOrder> transactionOrders,
             CancellationToken ctx = default)
         {
@@ -140,8 +141,10 @@ namespace HappySkorpion.FioClient
 
             var import = MapperHelper.MapToDomesticTransactionsImport(transactionOrders);
 
-            await SendTransactionOrderAsync(import, ctx)
+            var result = await SendTransactionOrderAsync(import, ctx)
                 .ConfigureAwait(false);
+
+            return MapperHelper.MapToOrdersResult(result);
         }
 
         /// <summary>
@@ -149,7 +152,7 @@ namespace HappySkorpion.FioClient
         /// </summary>
         /// <param name="transactionOrder">Domestic transaction order.</param>
         /// <param name="ctx">Cancellation token.</param>
-        public async Task SendTransactionOrderAsync(
+        public async Task<OrdersResult> SendTransactionOrderAsync(
             DomesticTransactionOrder transactionOrder,
             CancellationToken ctx = default)
         {
@@ -159,8 +162,10 @@ namespace HappySkorpion.FioClient
 
             var import = MapperHelper.MapToDomesticTransactionsImport(new[] { transactionOrder });
 
-            await SendTransactionOrderAsync(import, ctx)
+            var result = await SendTransactionOrderAsync(import, ctx)
                 .ConfigureAwait(false);
+
+            return MapperHelper.MapToOrdersResult(result);
         }
 
         /// <summary>
@@ -168,7 +173,7 @@ namespace HappySkorpion.FioClient
         /// </summary>
         /// <param name="transactionOrders">Euro transactions order.</param>
         /// <param name="ctx">Cancellation token.</param>
-        public async Task SendTransactionOrdersAsync(
+        public async Task<OrdersResult> SendTransactionOrdersAsync(
             IEnumerable<EuroTransactionOrder> transactionOrders,
             CancellationToken ctx = default)
         {
@@ -178,8 +183,10 @@ namespace HappySkorpion.FioClient
 
             var import = MapperHelper.MapToT2TransactionsImport(transactionOrders);
 
-            await SendTransactionOrderAsync(import, ctx)
+            var result = await SendTransactionOrderAsync(import, ctx)
                 .ConfigureAwait(false);
+
+            return MapperHelper.MapToOrdersResult(result);
         }
 
         /// <summary>
@@ -187,7 +194,7 @@ namespace HappySkorpion.FioClient
         /// </summary>
         /// <param name="transactionOrder">Euro transaction order.</param>
         /// <param name="ctx">Cancellation token.</param>
-        public async Task SendTransactionOrderAsync(
+        public async Task<OrdersResult> SendTransactionOrderAsync(
             EuroTransactionOrder transactionOrder,
             CancellationToken ctx = default)
         {
@@ -197,8 +204,10 @@ namespace HappySkorpion.FioClient
 
             var import = MapperHelper.MapToT2TransactionsImport(new[] { transactionOrder });
 
-            await SendTransactionOrderAsync(import, ctx)
+            var result = await SendTransactionOrderAsync(import, ctx)
                 .ConfigureAwait(false);
+
+            return MapperHelper.MapToOrdersResult(result);
         }
 
         /// <summary>
@@ -206,7 +215,7 @@ namespace HappySkorpion.FioClient
         /// </summary>
         /// <param name="transactionOrders">Foreign transactions order.</param>
         /// <param name="ctx">Cancellation token.</param>
-        public async Task SendTransactionOrdersAsync(
+        public async Task<OrdersResult> SendTransactionOrdersAsync(
             IEnumerable<ForeignTransactionOrder> transactionOrders,
             CancellationToken ctx = default)
         {
@@ -216,8 +225,10 @@ namespace HappySkorpion.FioClient
 
             var import = MapperHelper.MapToForeignTransactionsImport(transactionOrders);
 
-            await SendTransactionOrderAsync(import, ctx)
+            var result = await SendTransactionOrderAsync(import, ctx)
                 .ConfigureAwait(false);
+
+            return MapperHelper.MapToOrdersResult(result);
         }
 
         /// <summary>
@@ -225,7 +236,7 @@ namespace HappySkorpion.FioClient
         /// </summary>
         /// <param name="transactionOrder">Foreign transaction order.</param>
         /// <param name="ctx">Cancellation token.</param>
-        public async Task SendTransactionOrderAsync(
+        public async Task<OrdersResult> SendTransactionOrderAsync(
             ForeignTransactionOrder transactionOrder,
             CancellationToken ctx = default)
         {
@@ -235,28 +246,37 @@ namespace HappySkorpion.FioClient
 
             var import = MapperHelper.MapToForeignTransactionsImport(new[] { transactionOrder });
 
-            await SendTransactionOrderAsync(import, ctx)
+            var result = await SendTransactionOrderAsync(import, ctx)
                 .ConfigureAwait(false);
+
+            return MapperHelper.MapToOrdersResult(result);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Simplify collection initialization")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Not needed")]
-        private async Task SendTransactionOrderAsync<TTransaction>(
+        private async Task<ResponseImport> SendTransactionOrderAsync<TTransaction>(
             Import<TTransaction> import,
             CancellationToken ctx)
         {
             var url = new Uri($"{BaseUrl}/rest/import/");
 
+            var file = XmlSerializerHelper.Serialize(import);
+
             using var content = new MultipartFormDataContent();
-            content.Add(new StringContent(_authToken), "token");
+            content.Add(new StringContent(_apiToken), "token");
             content.Add(new StringContent("xml"), "type");
             content.Add(new StringContent("lng"), "en");
-            content.Add(new StringContent(XmlSerializerHelper.Serialize(import)), "file");
+            content.Add(new StringContent(file), "file", "file.xml");
 
             using var response = await _httpClient.PostAsync(url, content, ctx)
                 .ConfigureAwait(false);
 
-            using var successfulResponse = response.EnsureSuccessStatusCode();
+            response.EnsureSuccessStatusCode();
+
+            using var result = await response.Content.ReadAsStreamAsync()
+                .ConfigureAwait(false);
+
+            return XmlSerializerHelper.Deserialize<ResponseImport>(result);
         }
 
         private async Task<AccountStatement> GetAccountStatementAsync(
@@ -266,9 +286,9 @@ namespace HappySkorpion.FioClient
             using var response = await _httpClient.GetAsync(url, ctx)
                 .ConfigureAwait(false);
 
-            using var successResponse = response.EnsureSuccessStatusCode();
+            response.EnsureSuccessStatusCode();
 
-            using var content = await successResponse.Content.ReadAsStreamAsync()
+            using var content = await response.Content.ReadAsStreamAsync()
                 .ConfigureAwait(false);
 
             return XmlSerializerHelper.Deserialize<AccountStatement>(content);

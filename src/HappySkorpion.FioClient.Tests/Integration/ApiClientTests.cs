@@ -1,22 +1,33 @@
+using HappySkorpion.FioClient.Tests.Fixtures;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace HappySkorpion.FioClient.Tests.Integration
 {
     [Trait("Category", "Integration")]
+    [Collection(nameof(IntegrationConfigurationFixture))]
     public class ApiClientTests
         : IDisposable,
-        IClassFixture<TokenFixture>
+        IClassFixture<IntegrationsFixture>
     {
+        public class Fixture
+        {
+            public string Token { get; set; }
+            public IList<DomesticTransactionOrder> DomesticTransactionOrders { get; set; }
+        }
+
+        private readonly Fixture _fixture;
         private readonly ApiClient _client;
 
         #region Initialization and Clenaup
 
         public ApiClientTests(
-            TokenFixture tokenFixture)
+            IntegrationConfigurationFixture configurationFixture)
         {
-            _client = new ApiClient(tokenFixture.Token);
+            _fixture = configurationFixture.Get<Fixture>();
+            _client = new ApiClient(_fixture.Token);
         }
 
         public void Dispose()
@@ -50,14 +61,7 @@ namespace HappySkorpion.FioClient.Tests.Integration
         [Fact]
         public async Task SendEuroPaymentOrder_Pass()
         {
-            var paymentOrders = new [] 
-            {
-                new EuroTransactionOrder
-                {
-                }
-            };
-
-            await _client.SendTransactionOrdersAsync(paymentOrders);
+            await _client.SendTransactionOrdersAsync(_fixture.DomesticTransactionOrders);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace HappySkorpion.FioClient.Tests.Unit.Validators
                 MessageForRecipient = "Message",
                 Comment = "Comment",
                 PaymentReason = PaymentReason.Reason110,
-                PaymentType = PaymentType.Standard,
+                PaymentType = DomesticPaymentType.Standard,
             };
         }
 
@@ -653,10 +653,10 @@ namespace HappySkorpion.FioClient.Tests.Unit.Validators
         }
 
         [Theory]
-        [InlineData(new object[] { PaymentType.Standard })]
-        [InlineData(new object[] { PaymentType.Precedential })]
-        [InlineData(new object[] { PaymentType.Collection })]
-        public async Task PaymentType_ValidPaymentType_Pass(PaymentType paymentType)
+        [InlineData(new object[] { DomesticPaymentType.Standard })]
+        [InlineData(new object[] { DomesticPaymentType.Precedential })]
+        [InlineData(new object[] { DomesticPaymentType.Collection })]
+        public async Task PaymentType_ValidPaymentType_Pass(DomesticPaymentType paymentType)
         {
             var order = GetValidOrder();
             order.PaymentType = paymentType;
@@ -685,7 +685,7 @@ namespace HappySkorpion.FioClient.Tests.Unit.Validators
         public async Task PaymentType_InvalidPaymentType_Fail()
         {
             var order = GetValidOrder();
-            order.PaymentType = (PaymentType)1;
+            order.PaymentType = (DomesticPaymentType)1;
 
             var result = await new DomesticTransactionOrderValidation()
                 .ValidateAsync(order)

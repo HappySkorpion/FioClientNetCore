@@ -81,6 +81,6 @@
         /// <summary>
         /// Payment type.
         /// </summary>
-        public PaymentType? PaymentType { get; set; }
+        public DomesticPaymentType? PaymentType { get; set; }
     }
 }

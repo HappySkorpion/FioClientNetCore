@@ -116,8 +116,7 @@
 
         /// <summary>
         /// Payment type.
-        /// Allowed values <see cref="PaymentType.Standard">Standard</see> or <see cref="PaymentType.Precedential">Precedential</see>
         /// </summary>
-        public PaymentType? PaymentType { get; set; }
+        public EuroPaymentType? PaymentType { get; set; }
     }
 }

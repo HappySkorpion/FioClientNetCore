@@ -30,7 +30,7 @@ namespace HappySkorpion.FioClient.Tests.Unit.Validators
                 RemittanceInfo2 = "RemittanceInfo2",
                 RemittanceInfo3 = "RemittanceInfo3",
                 PaymentReason = PaymentReason.Reason110,
-                PaymentType = PaymentType.Standard,
+                PaymentType = EuroPaymentType.Standard,
             };
         }
 
@@ -903,10 +903,10 @@ namespace HappySkorpion.FioClient.Tests.Unit.Validators
         }
 
         [Theory]
-        [InlineData(new object[] { PaymentType.Standard })]
-        [InlineData(new object[] { PaymentType.Precedential })]
+        [InlineData(new object[] { EuroPaymentType.Standard })]
+        [InlineData(new object[] { EuroPaymentType.Precedential })]
 
-        public async Task PaymentType_ValidPaymentType_Pass(PaymentType paymentType)
+        public async Task PaymentType_ValidPaymentType_Pass(EuroPaymentType paymentType)
         {
             var order = GetValidOrder();
             order.PaymentType = paymentType;
@@ -931,12 +931,11 @@ namespace HappySkorpion.FioClient.Tests.Unit.Validators
             result.IsValid.Should().BeTrue();
         }
 
-        [Theory]
-        [InlineData(new object[] { PaymentType.Collection })]
-        public async Task PaymentType_InvalidPaymentType_Fail(PaymentType paymentType)
+        [Fact]
+        public async Task PaymentType_InvalidPaymentType_Fail()
         {
             var order = GetValidOrder();
-            order.PaymentType = paymentType;
+            order.PaymentType = (EuroPaymentType)1;
 
             var result = await new EuroTransactionOrderValidation()
                 .ValidateAsync(order)

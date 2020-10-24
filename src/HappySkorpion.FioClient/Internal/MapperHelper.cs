@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 
 namespace HappySkorpion.FioClient.Internal
@@ -61,6 +60,31 @@ namespace HappySkorpion.FioClient.Internal
                     InstructionId = x.InstructionId,
                     Accountant = x.Accountant,
                 })
+                    .ToList(),
+            };
+        }
+
+        public static OrdersResult MapToOrdersResult(
+            ResponseImport responseImport)
+        {
+            _ = responseImport ?? throw new ArgumentNullException(nameof(responseImport));
+
+            return new OrdersResult
+            {
+                IdInstruction = responseImport.Result.IdInstruction,
+                Status = responseImport.Result.Status,
+                ErrorCode = responseImport.Result.ErrorCode,
+                OrderResults = responseImport.Orders.Select(x => new OrderResult
+                    { 
+                        Id = x.Id,
+                        Messages = x.Messages.Select(m => new OrderResultMessage
+                        {
+                            ErrorCode = m.ErrorCode,
+                            Status = m.Status,
+                            Text = m.Text,
+                        })
+                        .ToList(),
+                    })
                     .ToList(),
             };
         }

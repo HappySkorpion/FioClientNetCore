@@ -1,9 +1,8 @@
 ﻿namespace HappySkorpion.FioClient
 {
-    public enum PaymentType
+    public enum EuroPaymentType
     {
         Standard = 431008,
         Precedential = 431009,
-        Collection = 431022, // inkaso
     }
 }

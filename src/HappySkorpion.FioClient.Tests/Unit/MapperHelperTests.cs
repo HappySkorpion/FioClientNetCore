@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using HappySkorpion.FioClient.Internal;
 using HappySkorpion.FioClient.Internal.Dtos;
-using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace HappySkorpion.FioClient.Tests.Unit
@@ -150,6 +150,73 @@ namespace HappySkorpion.FioClient.Tests.Unit
         }
 
         [Fact]
+        public void MapToOrdersResult_Pass()
+        {
+            var statement = new ResponseImport
+            {
+                Result = new Result
+                {
+                    ErrorCode = 1,
+                    IdInstruction = 2,
+                    Message = "message",
+                    Status = "warning",
+                    Sums = new[] 
+                    {
+                        new Sum
+                        {
+                            Id = "CZK",
+                            SumCredit = 50M,
+                            SumDebet = 0M,
+                        }
+                    }
+                },
+                Orders = new [] 
+                {
+                    new OrderDetail
+                    {
+                        Id = 1,
+                        Messages = new OrderDetailMessage[] 
+                        {
+                            new OrderDetailMessage 
+                            { 
+                                ErrorCode = 1, 
+                                Status = "warning",
+                                Text = "Text test",
+                            }
+                        }
+                    }
+                },
+            };
+
+            var expectedOrdersResult = new OrdersResult
+            {
+               ErrorCode = 1,
+               IdInstruction = 2,
+               Status = "warning",
+               OrderResults = new List<OrderResult>(new [] 
+               {
+                   new OrderResult
+                   {
+                       Id = 1,
+                       Messages = new List<OrderResultMessage> (new [] 
+                       {
+                           new OrderResultMessage
+                           {
+                               ErrorCode = 1,
+                               Status = "warning",
+                               Text = "Text test",
+                           }
+                       }),
+                   }
+               }),
+            };
+
+            var mappedTransactionResult = MapperHelper.MapToOrdersResult(statement);
+
+            mappedTransactionResult.Should().BeEquivalentTo(expectedOrdersResult);
+        }
+
+        [Fact]
         public void MapDomesticTransactionOrdersToDomesticTransactionImport_Pass()
         {
             var orders = new []
@@ -168,7 +235,7 @@ namespace HappySkorpion.FioClient.Tests.Unit
                     MessageForRecipient = "MessageForReceipient",
                     Comment = "Comment",
                     PaymentReason = PaymentReason.Reason110,
-                    PaymentType = PaymentType.Standard,
+                    PaymentType = DomesticPaymentType.Standard,
                 }
             };
 
@@ -190,7 +257,7 @@ namespace HappySkorpion.FioClient.Tests.Unit
                         MessageForRecipient = "MessageForReceipient",
                         Comment = "Comment",
                         PaymentReason = PaymentReason.Reason110,
-                        PaymentType = PaymentType.Standard,
+                        PaymentType = DomesticPaymentType.Standard,
                     },
                 }
             };
@@ -225,7 +292,7 @@ namespace HappySkorpion.FioClient.Tests.Unit
                     RemittanceInfo2 = "RemittanceInfo2",
                     RemittanceInfo3 = "RemittanceInfo3",
                     PaymentReason = PaymentReason.Reason110,
-                    PaymentType = PaymentType.Standard,
+                    PaymentType = EuroPaymentType.Standard,
                 }
             };
 
@@ -253,7 +320,7 @@ namespace HappySkorpion.FioClient.Tests.Unit
                         RemittanceInfo2 = "RemittanceInfo2",
                         RemittanceInfo3 = "RemittanceInfo3",
                         PaymentReason = PaymentReason.Reason110,
-                        PaymentType = PaymentType.Standard,
+                        PaymentType = EuroPaymentType.Standard,
                     },
                 }
             };

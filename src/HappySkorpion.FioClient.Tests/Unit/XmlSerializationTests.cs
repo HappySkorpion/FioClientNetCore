@@ -2,8 +2,6 @@
 using HappySkorpion.FioClient.Internal;
 using HappySkorpion.FioClient.Internal.Dtos;
 using HappySkorpion.FioClient.Tests.Unit.Helpers;
-using System;
-using System.Globalization;
 using Xunit;
 
 namespace HappySkorpion.FioClient.Tests.Unit
@@ -124,6 +122,72 @@ namespace HappySkorpion.FioClient.Tests.Unit
         }
 
         [Fact]
+        public void DeserializeImportResultFromXml_Pass()
+        {
+            var importResultXml = @"<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>
+                <responseImport xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xsi:noNamespaceSchemaLocation=""http://www.fio.cz/schema/responseImport.xsd"">
+                  <result>
+                    <errorCode>2</errorCode>
+                    <idInstruction>1737226795</idInstruction>
+                    <status>warning</status>
+                    <message>Test message</message>
+                    <sums>
+                      <sum id=""CZK"">
+                        <sumCredit>0</sumCredit>
+                        <sumDebet>50</sumDebet>
+                      </sum>
+                    </sums>
+                  </result>
+                  <ordersDetails>
+                    <detail id=""1"">
+                      <messages>
+                        <message status=""warning"" errorCode=""283"">Warning message</message>
+                      </messages>
+                    </detail>
+                  </ordersDetails>
+                </responseImport>";
+
+            var expectedImportResult = new ResponseImport
+            {
+                Result = new Result
+                {
+                    ErrorCode = 2,
+                    IdInstruction = 1737226795,
+                    Status = "warning",
+                    Message = "Test message",
+                    Sums = new[] { 
+                        new Sum
+                        {
+                            Id = "CZK",
+                            SumCredit = 0,
+                            SumDebet = 50,
+                        }
+                    }
+                },
+                Orders = new[] 
+                {
+                    new OrderDetail
+                    {
+                        Id = 1,
+                        Messages = new [] 
+                        {
+                            new OrderDetailMessage
+                            {
+                                ErrorCode = 283,
+                                Status = "warning",
+                                Text = "Warning message",
+                            }
+                        }
+                    }
+                }
+            };
+
+            var deserializedImportResult = XmlSerializerHelper.Deserialize<ResponseImport>(importResultXml.ToStream());
+
+            deserializedImportResult.Should().BeEquivalentTo(expectedImportResult);
+        }
+
+        [Fact]
         public void SerializeDomesticTransactionsImportIntoXml_Pass()
         {
             var domesticImport = new Import<DomesticTransaction>
@@ -142,7 +206,7 @@ namespace HappySkorpion.FioClient.Tests.Unit
                         Date = "2020-10-10",
                         MessageForRecipient = "MessageForReceipient",
                         PaymentReason = PaymentReason.Reason110,
-                        PaymentType = PaymentType.Standard,
+                        PaymentType = DomesticPaymentType.Standard,
                         SpecificSymbol = "SpecificSymbol",
                         VariableSymbol = "VariableSymbol",                        
                     }
@@ -150,15 +214,15 @@ namespace HappySkorpion.FioClient.Tests.Unit
             };
 
             var expectedImport =
-@"<?xml version=""1.0"" encoding=""utf-16""?>
+@"<?xml version=""1.0"" encoding=""utf-8""?>
 <Import xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xsi:noNamespaceSchemaLocation=""http://www.fio.cz/schema/importIB.xsd"">
   <Orders>
     <DomesticTransaction>
       <accountFrom>AccountFrom</accountFrom>
-      <amount>20.55</amount>
       <currency>CZK</currency>
-      <bankCode>BankCode</bankCode>
+      <amount>20.55</amount>
       <accountTo>AccountTo</accountTo>
+      <bankCode>BankCode</bankCode>
       <ks>ConstantSymbol</ks>
       <vs>VariableSymbol</vs>
       <ss>SpecificSymbol</ss>
@@ -166,7 +230,7 @@ namespace HappySkorpion.FioClient.Tests.Unit
       <messageForRecipient>MessageForReceipient</messageForRecipient>
       <comment>Comment</comment>
       <paymentReason>110</paymentReason>
-      <paymentType>431008</paymentType>
+      <paymentType>431001</paymentType>
     </DomesticTransaction>
   </Orders>
 </Import>";
@@ -194,7 +258,7 @@ namespace HappySkorpion.FioClient.Tests.Unit
                         Bic = "Bic",
                         Date = "2020-10-10",
                         PaymentReason = PaymentReason.Reason110,
-                        PaymentType = PaymentType.Standard,
+                        PaymentType = EuroPaymentType.Standard,
                         SpecificSymbol = "SpecificSymbol",
                         VariableSymbol = "VariableSymbol",
                         BenefName = "BenefName",
@@ -209,13 +273,13 @@ namespace HappySkorpion.FioClient.Tests.Unit
             };
 
             var expectedImport =
-@"<?xml version=""1.0"" encoding=""utf-16""?>
+@"<?xml version=""1.0"" encoding=""utf-8""?>
 <Import xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xsi:noNamespaceSchemaLocation=""http://www.fio.cz/schema/importIB.xsd"">
   <Orders>
     <T2Transaction>
       <accountFrom>AccountFrom</accountFrom>
-      <amount>100.00</amount>
       <currency>EUR</currency>
+      <amount>100.00</amount>
       <accountTo>AccountTo</accountTo>
       <ks>ConstantSymbol</ks>
       <vs>VariableSymbol</vs>
@@ -272,13 +336,13 @@ namespace HappySkorpion.FioClient.Tests.Unit
             };
 
             var expectedImport =
-@"<?xml version=""1.0"" encoding=""UTF-16""?>
+@"<?xml version=""1.0"" encoding=""UTF-8""?>
 <Import xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xsi:noNamespaceSchemaLocation=""http://www.fio.cz/schema/importIB.xsd"">
   <Orders>
     <ForeignTransaction>
       <accountFrom>AccountFrom</accountFrom>
-      <amount>100.00</amount>
       <currency>USD</currency>
+      <amount>100.00</amount>
       <accountTo>AccountTo</accountTo>
       <bic>Bic</bic>
       <date>2020-10-10</date>
