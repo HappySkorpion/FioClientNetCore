@@ -1,0 +1,14 @@
+﻿{
+  "token": "<Token>",
+
+  "domesticTransactionOrders": [
+    {
+      "SourceAccountNumber": "dddddddddd",
+      "Amount": 100,
+      "Currency": "CZK",
+      "DestinationAccountBank": "dddd",
+      "DestinationAccountNumber": "dddddddddd",
+      "Date": "yyyy-MM-dd"
+    }
+  ]
+}

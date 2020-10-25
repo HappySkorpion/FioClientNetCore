@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <None Remove="integration.json" />
+    <None Remove="integration.template.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="integration.template.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="integration.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
