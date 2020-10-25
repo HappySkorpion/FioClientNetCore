@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>Andrej Furtak</Authors>
+    <Company>HappySkorpion</Company>
+    <Product>FioClient</Product>
+    <Description>Client for communication with Fio bank API.</Description>
+    <PackageProjectUrl>https://github.com/HappySkorpion/FioClientNetCore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HappySkorpion/FioClientNetCore</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <NeutralLanguage></NeutralLanguage>
+    <PackageTags>bank client Fio API</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="9.2.2" />
+    <PackageReference Include="IbanNet.FluentValidation" Version="4.1.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

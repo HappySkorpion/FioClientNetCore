@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HappySkorpion.FioClient", "HappySkorpion.FioClient\HappySkorpion.FioClient.csproj", "{221254A7-260D-4CFA-BDC2-A00EFD17A713}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HappySkorpion.FioClient.Tests", "HappySkorpion.FioClient.Tests\HappySkorpion.FioClient.Tests.csproj", "{C738F3D3-7B6B-4012-99F9-57F2FBB66606}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{221254A7-260D-4CFA-BDC2-A00EFD17A713}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{221254A7-260D-4CFA-BDC2-A00EFD17A713}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{221254A7-260D-4CFA-BDC2-A00EFD17A713}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{221254A7-260D-4CFA-BDC2-A00EFD17A713}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C738F3D3-7B6B-4012-99F9-57F2FBB66606}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C738F3D3-7B6B-4012-99F9-57F2FBB66606}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C738F3D3-7B6B-4012-99F9-57F2FBB66606}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C738F3D3-7B6B-4012-99F9-57F2FBB66606}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DC306508-119E-411C-B9F5-505711F4ABF0}
+	EndGlobalSection
+EndGlobal
