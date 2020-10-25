@@ -40,22 +40,19 @@ namespace HappySkorpion.FioClient.Tests.Integration
         [Fact]
         public async Task ListTransactionsInPeriod_Pass()
         {
-            var result = await _client
-                .ListTransactionsAsync(DateTime.Today.AddDays(-1), DateTime.Today);
+            await _client.ListTransactionsAsync(DateTime.Today.AddDays(-1), DateTime.Today);
         }
 
         [Fact]
         public async Task ListTransactionsIn_Pass()
         {
-            var result = await _client
-                .ListTransactionsAsync(2020, 1);
+            await _client.ListTransactionsAsync(2020, 1);
         }
 
         [Fact]
         public async Task ListLastTransactions_Pass()
         {
-            var result = await _client
-                .ListLastTransactionsAsync();
+            await _client.ListLastTransactionsAsync();
         }
 
         [Fact]

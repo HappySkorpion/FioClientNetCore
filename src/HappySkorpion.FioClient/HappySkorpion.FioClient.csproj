@@ -2,6 +2,18 @@
   
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>Andrej Furtak</Authors>
+    <Company>HappySkorpion</Company>
+    <Product>FioClient</Product>
+    <Description>Client for communication with Fio bank API.</Description>
+    <PackageProjectUrl>https://github.com/HappySkorpion/FioClientNetCore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HappySkorpion/FioClientNetCore</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <NeutralLanguage></NeutralLanguage>
+    <PackageTags>bank client Fio API</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
